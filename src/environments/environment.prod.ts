@@ -1,0 +1,10 @@
+export const environment = {
+  production: true,
+  azure: {
+    clientId: '2ca505d9-b7d8-498c-a3ba-d7dadbfb0463',
+    tenantId: '933fff9c-10ab-4e02-8b55-7683ea857d4b',
+    redirectUri: 'https://tu-frontend.azurestaticapps.net',
+    scopes: ['api://6f8c376e-3314-4fcf-a01d-97ba44c25721/access_as_user']
+  },
+  apiGatewayUrl: 'https://pedidos360-apim.azure-api.net'
+};
