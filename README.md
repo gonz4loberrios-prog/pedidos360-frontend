@@ -53,6 +53,19 @@ export const environment = {
 
 El **MSAL Interceptor** adjunta automáticamente el token de acceso a las peticiones dirigidas a `apiGatewayUrl`, por lo que no es necesario gestionar el header `Authorization` de forma manual.
 
+## 🧭 Estructura y Rutas
+
+La aplicación es **standalone** con routing:
+
+| Ruta | Componente | Protección |
+|------|-----------|-----------|
+| `/` | `components/home/home.component.ts` | Pública (login con Azure AD) |
+| `/pedidos` | `components/pedidos/pedidos.component.ts` | **`MsalGuard`** (requiere sesión) |
+
+- **AppComponent**: shell con `<router-outlet>`.
+- **HomeComponent**: maneja el flujo de redirección de MSAL (`handleRedirectPromise`) y redirige a `/pedidos` al iniciar sesión.
+- **PedidosComponent**: lee los **claims del token JWT** (`roles` y `scp`/scopes) mediante `acquireTokenSilent` + decodificación del payload, y consume `GET /api/pedidos`.
+
 ## ▶️ Ejecución
 
 **Requisitos:** Node.js 18+, npm.
