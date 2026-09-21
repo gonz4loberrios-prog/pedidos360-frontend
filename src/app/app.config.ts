@@ -1,14 +1,16 @@
 import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { 
-  MsalService, MsalGuard, MsalInterceptor, 
+import {
+  MsalService, MsalGuard, MsalInterceptor,
   MSAL_INSTANCE, MSAL_GUARD_CONFIG, MSAL_INTERCEPTOR_CONFIG,
-  MsalGuardConfiguration, MsalInterceptorConfiguration 
+  MsalGuardConfiguration, MsalInterceptorConfiguration
 } from '@azure/msal-angular';
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 import { environment } from '../environments/environment';
+import { routes } from './app.routes';
 
-export function MSALInstanceFactory() {
+export function MSALInstanceFactory(): PublicClientApplication {
   return new PublicClientApplication({
     auth: {
       clientId: environment.azure.clientId,
@@ -41,6 +43,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
     { provide: MSAL_GUARD_CONFIG, useFactory: MSALGuardConfigFactory },
