@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, APP_INITIALIZER } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
@@ -18,8 +18,7 @@ export function MSALInstanceFactory(): PublicClientApplication {
       redirectUri: environment.azure.redirectUri
     },
     cache: {
-      cacheLocation: 'localStorage',
-      storeAuthStateInCookie: false
+      cacheLocation: 'localStorage'
     }
   });
 }
@@ -37,8 +36,13 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
 
   return {
     interactionType: InteractionType.Redirect,
-    protectedResourceMap
+    protectedResourceMap,
+    strictMatching: false
   };
+}
+
+export function msalInitializeFactory(msalInstance: PublicClientApplication): () => Promise<void> {
+  return () => msalInstance.initialize();
 }
 
 export const appConfig: ApplicationConfig = {
@@ -48,6 +52,7 @@ export const appConfig: ApplicationConfig = {
     { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
     { provide: MSAL_GUARD_CONFIG, useFactory: MSALGuardConfigFactory },
     { provide: MSAL_INTERCEPTOR_CONFIG, useFactory: MSALInterceptorConfigFactory },
+    { provide: APP_INITIALIZER, useFactory: msalInitializeFactory, deps: [MSAL_INSTANCE], multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
     MsalService,
     MsalGuard

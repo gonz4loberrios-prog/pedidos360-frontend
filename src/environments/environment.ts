@@ -6,5 +6,5 @@ export const environment = {
     redirectUri: 'http://localhost:4200',
     scopes: ['api://6f8c376e-3314-4fcf-a01d-97ba44c25721/access_as_user']
   },
-  apiGatewayUrl: 'http://localhost:8080'
+  apiGatewayUrl: 'https://6zxtog7jsb.execute-api.us-east-1.amazonaws.com/prod'
 };
